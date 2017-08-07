@@ -8,6 +8,7 @@ import patientSearchComponent from './components/patientSearch.component.js';
 import encounterComponent from './components/encounter.component.js';
 import observationComponent from './components/observation.component.js';
 import providerComponent from './components/provider.component.js';
+import patientCreateComponent from './components/patientCreate.component.js';
 import uicommons from 'openmrs-contrib-uicommons';
 
 let homeModule = angular.module('home', [ uiRouter, 'openmrs-contrib-uicommons'])
@@ -31,6 +32,7 @@ let homeModule = angular.module('home', [ uiRouter, 'openmrs-contrib-uicommons']
     .component('patientSearchComponent', patientSearchComponent )
     .component('encounterComponent', encounterComponent)
     .component('observationComponent', observationComponent)
-    .component('providerComponent', providerComponent);
+    .component('providerComponent', providerComponent)
+    .component('patientCreateComponent', patientCreateComponent );
 
 export default homeModule;

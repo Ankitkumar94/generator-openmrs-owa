@@ -1,0 +1,87 @@
+<div ng-hide="vm.isHiddenPerson" style="width: auto; height: auto">
+
+  <h4> Step I </h4>
+  <hr>
+
+  <form>
+    Given Name : ** <input type="text" style="width: 60%; height: 30px" ng-model="vm.personData.names[0].givenName" placeholder="Enter First/Given Name" /><br/>
+
+    Middle Name : <input type="text" style="width: 60%; height: 30px" ng-model="vm.personData.names[0].middleName" placeholder="Enter Middle Name" /><br/>
+
+    Family Name : ** <input type="text" style="width: 60%; height: 30px" ng-model="vm.personData.names[0].familyName" placeholder="Enter Family Name" /><br/>
+
+    Gender : ** <input type="text" style="width: 60%; height: 30px" ng-model="vm.personData.gender" placeholder="Enter Patient Gender" /><br/>
+
+    Age : <input type="text" style="width: 60%; height: 30px" ng-model="vm.personData.age" placeholder="Enter Age" /><br/>
+
+    <a href="" ng-click="vm.addressFields()"> <small> Hide/Show Address Fields (optional) </small> </a> <br/><br/>
+
+    <div ng-hide="vm.addressHidden">
+    Address 1 : <input type="text" style="width: 60%; height: 30px" ng-model="vm.personData.addresses[0].address1" placeholder="Enter Address" /> <br/>
+    Address 2 : <input type="text" style="width: 60%; height: 30px" ng-model="vm.personData.addresses[0].address2" placeholder="Enter Address" /> <br/>
+    City / Village : <input type="text" style="width: 60%; height: 30px" ng-model="vm.personData.addresses[0].cityVillage" placeholder="Enter CIty or Village" /> <br/>
+    State / Province : <input type="text" style="width: 60%; height: 30px" ng-model="vm.personData.addresses[0].stateProvince" placeholder="Enter State/Province" /> <br/>
+    Country : <input type="text" style="width: 60%; height: 30px" ng-model="vm.personData.addresses[0].country" placeholder="Enter Country" /> <br/>
+    </div>
+
+    <input type="submit" ng-click="vm.oncreatePerson()" value="Next Step"/>
+  </form> <br/>
+
+  <img ng-hide="vm.loading" src="../../img/loading.gif"/>
+
+  <div ng-hide="vm.error">
+    <small> Halt !! Error with response : 400 </small> <br/>
+    <small> <b> Note: </b> Kindly fill all the fields marked with ** properly !! Don't leave it blank </small>
+  </div> <br/>
+
+</div>
+
+<div ng-hide="vm.isHiddenPatient" style="width: auto; height: auto">
+
+  <h4> Step II </h4>
+  <hr>
+
+  <div>
+    <a href="" ng-click="vm.back()"> <small> << Back to Step I </small> </a>
+  </div> <br/>
+
+  <form>
+    Patient Identifier : ** <input type="text" style="width: 60%; height: 30px" ng-model="vm.patientData.identifiers[0].identifier" placeholder="Enter Identifier" />
+    <a href ng-click="vm.generateIdentifier()"> <small> Click to generate Identifier if needed </small> </a>
+    <img ng-hide="vm.loadingIdentifier" src="../../img/loading.gif"/> <br/><br/>
+
+    <p> Choose patient location: **</p>
+
+    <select ng-change="vm.onSelectLocation()" ng-init ="vm.selectedLocation = vm.locations[0].name" ng-model="vm.selectedLocation">
+      <option ng-repeat="x in vm.locations" value="{{x.name}}">{{x.name}}</option>
+    </select> <br/>
+
+    <input type="submit" ng-click="vm.oncreatePatient()" value="Confirm"/>
+  </form> <br/>
+
+  <img ng-hide="vm.loadingPatient" src="../../img/loading.gif"/>
+
+  <div ng-hide="vm.errorPatient">
+    <small> Halt !! Error with response : 400 </small> <br/>
+    <small> <b> Note: </b> Kindly check all the fields marked with ** properly !! </small>
+  </div>
+
+  <div ng-hide="vm.blankFields">
+    <small> Halt !! Error with response : 400 </small> <br/>
+    <small> <b> Note: </b> Kindly fill all the fields marked with ** properly !! Don't leave it blank </small>
+  </div>
+
+  <div style="width: 60%; height: auto" ng-hide="vm.statusPatient">
+    <h4> Response </h4>
+    <small> ** Patient Created successfully ** </small> <br/>
+    <small> <b> Details : </b> </small> <br/>
+    <small> Display Name (with identifier) : {{vm.displayPatient}} </small> <br/>
+    <small> Gender : {{vm.genderPatient}} </small> <br/>
+    <small> Age : {{vm.agePatient}} </small> <br/>
+    <small> uuid : {{vm.uuidPatient}} </small> <br/><br/>
+
+    <a href="" ng-click="vm.newPatient()"> <small> << Create a new Patient </small> </a> <br/>
+
+  </div> <br/>
+
+</div>
