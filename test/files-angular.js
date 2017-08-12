@@ -35,6 +35,7 @@ describe('Files check for AngularJS', function() {
       'app/js/home/translate.html',
       'app/js/home/patientSearch.html',
       'app/js/home/patientCreate.html',
+      'app/js/home/patientCreatePage.html',
       'app/js/home/observation.html',
       'app/js/home/encounter.html',
       'app/js/home/provider.html',

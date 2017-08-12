@@ -1,9 +1,13 @@
 class PatientCreateController {
   /* @ngInject */
-  constructor(openmrsRest, $http, openmrsContext) {
+  constructor(openmrsRest, $http, openmrsContext, $window) {
     var vm = this;
+    vm.locations = [];
+    vm.identifierTypes = [];
     vm.loading = true;
-    vm.error = true;
+    vm.errorPerson = true;
+    vm.blankPerson = true;
+    vm.errorAge = true;
     vm.statusPatient = true;
     vm.errorPatient = true;
     vm.loadingPatient = true;
@@ -11,7 +15,6 @@ class PatientCreateController {
     vm.isHiddenPerson = false;
     vm.isHiddenPatient = true;
     vm.addressHidden = true;
-    vm.blankFields = true;
     vm.personData = {
       "gender": "",
       "age": "",
@@ -37,40 +40,74 @@ class PatientCreateController {
       "identifiers": [
         {
           "identifier":"",
-          "identifierType":"05a29f94-c0ed-11e2-94be-8c13b969e334",
-          "location":"aff27d58-a15c-49a6-9beb-d30dcfc0c66e",
+          "identifierType":"",
+          "location":"",
           "preferred":true
         } ],
       "person": ""
     };
 
-    vm.locations = [
-      {name : "Amani Hospital", uuid : "aff27d58-a15c-49a6-9beb-d30dcfc0c66e"},
-      {name : "Inpatient Ward", uuid : "b1a8b05e-3542-4037-bbd3-998ee9c40574"},
-      {name : "Isolation Ward", uuid : "2131aff8-2e2a-480a-b7ab-4ac53250262b"},
-      {name : "Laboratory", uuid : "7fdfa2cb-bc95-405a-88c6-32b7673c0453"},
-      {name : "Outpatient Clinic", uuid : "58c57d25-8d39-41ab-8422-108a0c277d98"},
-      {name : "Pharmacy", uuid : "7f65d926-57d6-4402-ae10-a5b3bcbf7986"},
-      {name : "Registration Desk", uuid : "6351fcf4-e311-4a19-90f9-35667d99a8af"},
-      {name : "Unknown Location", uuid : "8d6c993e-c2cc-11de-8d13-0010c6dffd0f"}
-    ];
+    openmrsRest.getFull('location').then(function (response) {
+      vm.locations = response.results;
+      // for the default select options
+      vm.selectedLocation = vm.locations[0].uuid;
+      vm.patientData.identifiers[0].location = vm.locations[0].uuid;
+    });
+
+    openmrsRest.getFull('patientidentifiertype').then(function (response) {
+      vm.identifierTypes = response.results;
+      // for the default select options
+      vm.selectedIdentifier = vm.identifierTypes[0].uuid;
+      vm.patientData.identifiers[0].identifierType = vm.identifierTypes[0].uuid;
+    });
+
+    vm.validations = () => {
+      vm.gender = () =>{
+        if (vm.personData.gender.length > 0)
+          return true;
+      };
+      vm.givenName = () =>{
+        if (vm.personData.names[0].givenName.length > 0)
+          return true;
+      };
+      vm.familyName = () =>{
+        if (vm.personData.names[0].familyName.length > 0)
+          return true;
+      };
+      vm.age = () =>{
+        if (isNaN(vm.personData.age) || vm.personData.age < 1 || vm.personData.age > 100)
+          return true;
+      };
+    };
 
     vm.oncreatePerson = () => {
-      vm.error = true;
+      vm.errorPerson = true;
+      vm.blankPerson = true;
+      vm.errorAge = true;
       vm.loading = false;
-      if(vm.personData.names[0].givenName.length > 0 && vm.personData.names[0].familyName.length > 0 && vm.personData.gender.length > 0) {
-        openmrsRest.create('person', vm.personData).then(function (response) {
-          console.log(response.status);
-          vm.uuidPerson = response.uuid;
-          vm.patientData.person = vm.uuidPerson;
+      vm.validations();
+      if(vm.gender() && vm.givenName() && vm.familyName()) {
+        if(vm.age()) {
           vm.loading = true;
-          vm.isHiddenPerson = true;
-          vm.isHiddenPatient = false;
-        });
+          vm.errorAge = false;
+        }
+        else {
+          openmrsRest.create('person', vm.personData).then(function successCallback(response) {
+            console.log(response.status);
+            vm.uuidPerson = response.uuid;
+            vm.patientData.person = vm.uuidPerson;
+            vm.loading = true;
+            vm.isHiddenPerson = true;
+            vm.isHiddenPatient = false;
+          }, function errorCallback(response) {
+            vm.loading = true;
+            vm.errorPerson = false;
+          });
+        }
       }
       else {
         vm.loading = true;
-        vm.error = false;
+        vm.blankPerson = false;
       }
     };
 
@@ -85,8 +122,9 @@ class PatientCreateController {
 
     vm.generateIdentifier = () => {
       vm.platform = openmrsContext.getConfig().href;
+      vm.getContextPath = $window.location.origin;
       vm.loadingIdentifier = false;
-      $http.get('http://localhost:8081'+ vm.platform +'/module/idgen/generateIdentifier.form?source=1').
+      $http.get(vm.getContextPath + vm.platform +'/module/idgen/generateIdentifier.form?source=1').
       then(function successCallback(response) {
         vm.generate_identifier = response.data;
         vm.patientData.identifiers[0].identifier = vm.generate_identifier.identifiers[0];
@@ -120,54 +158,29 @@ class PatientCreateController {
     vm.oncreatePatient = () => {
       vm.statusPatient = true;
       vm.errorPatient = true;
-      vm.blankFields = true;
       vm.loadingPatient = false;
-      if(vm.patientData.person.length > 0 && vm.patientData.identifiers[0].identifier.length > 0 &&
-        vm.patientData.identifiers[0].identifierType.length > 0 && vm.patientData.identifiers[0].location.length > 0) {
-        openmrsRest.create('patient', vm.patientData).then(function successCallback(response) {
-          console.log(response.status);
-          vm.displayPatient = response.display;
-          vm.uuidPatient = response.uuid;
-          vm.agePatient = response.person.age;
-          vm.genderPatient = response.person.gender;
-          vm.loadingPatient = true;
-          vm.statusPatient = false;
-        }, function errorCallback(response) {
-          vm.loadingPatient = true;
-          vm.errorPatient = false;
-        });
-      }
-      else {
+
+      openmrsRest.create('patient', vm.patientData).then(function successCallback(response) {
+        console.log(response.status);
+        vm.displayPatient = response.display;
+        vm.uuidPatient = response.uuid;
+        vm.agePatient = response.person.age;
+        vm.genderPatient = response.person.gender;
         vm.loadingPatient = true;
-        vm.blankFields = false;
-      }
+        vm.statusPatient = false;
+       }, function errorCallback(response) {
+        vm.loadingPatient = true;
+        vm.errorMessage = response.data.error.message;
+        vm.globalErrorMessage = response.data.error.globalErrors[0].message;
+        vm.errorPatient = false;
+      });
     };
 
     vm.onSelectLocation = () => {
-      if (vm.selectedLocation == vm.locations[0].name) {
-        vm.patientData.identifiers[0].location = vm.locations[0].uuid;
-      }
-      else if (vm.selectedLocation == vm.locations[1].name) {
-        vm.patientData.identifiers[0].location = vm.locations[1].uuid;
-      }
-      else if (vm.selectedLocation == vm.locations[2].name) {
-        vm.patientData.identifiers[0].location = vm.locations[2].uuid;
-      }
-      else if (vm.selectedLocation == vm.locations[3].name) {
-        vm.patientData.identifiers[0].location = vm.locations[3].uuid;
-      }
-      else if (vm.selectedLocation == vm.locations[4].name) {
-        vm.patientData.identifiers[0].location = vm.locations[4].uuid;
-      }
-      else if (vm.selectedLocation == vm.locations[5].name) {
-        vm.patientData.identifiers[0].location = vm.locations[5].uuid;
-      }
-      else if (vm.selectedLocation == vm.locations[6].name) {
-        vm.patientData.identifiers[0].location = vm.locations[6].uuid;
-      }
-      else if (vm.selectedLocation == vm.locations[7].name) {
-        vm.patientData.identifiers[0].location = vm.locations[7].uuid;
-      }
+      vm.patientData.identifiers[0].location = vm.selectedLocation;
+    };
+    vm.onSelectIdentifier = () => {
+      vm.patientData.identifiers[0].identifierType = vm.selectedIdentifier;
     }
   }
 }

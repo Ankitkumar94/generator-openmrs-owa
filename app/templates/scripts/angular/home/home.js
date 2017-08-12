@@ -19,10 +19,21 @@ let homeModule = angular.module('home', [ uiRouter, 'openmrs-contrib-uicommons']
         $stateProvider.state('home', {
             url: '/',
             template: require('./home.html')
+        });
+
+        $stateProvider.state('createPatient', {
+        url: '/create-patient',
+        template: require('./patientCreatePage.html')
         })
     })
     .config(['$qProvider', function ($qProvider) {
       $qProvider.errorOnUnhandledRejections(false);
+    }])
+
+    // To prevent adding Hash bangs(#!/) instead of simple hash(#/) in Angular >1.5
+
+    .config(['$locationProvider', function($locationProvider) {
+      $locationProvider.hashPrefix('');
     }])
 
     .component('breadcrumbsComponent', breadcrumbsComponent)

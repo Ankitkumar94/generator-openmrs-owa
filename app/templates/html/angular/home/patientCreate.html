@@ -4,13 +4,13 @@
   <hr>
 
   <form>
-    Given Name : ** <input type="text" style="width: 60%; height: 30px" ng-model="vm.personData.names[0].givenName" placeholder="Enter First/Given Name" /><br/>
+    Given Name <small>(required)</small> <input type="text" style="width: 60%; height: 30px" ng-model="vm.personData.names[0].givenName" placeholder="Enter First/Given Name" /><br/>
 
     Middle Name : <input type="text" style="width: 60%; height: 30px" ng-model="vm.personData.names[0].middleName" placeholder="Enter Middle Name" /><br/>
 
-    Family Name : ** <input type="text" style="width: 60%; height: 30px" ng-model="vm.personData.names[0].familyName" placeholder="Enter Family Name" /><br/>
+    Family Name <small>(required)</small> <input type="text" style="width: 60%; height: 30px" ng-model="vm.personData.names[0].familyName" placeholder="Enter Family Name" /><br/>
 
-    Gender : ** <input type="text" style="width: 60%; height: 30px" ng-model="vm.personData.gender" placeholder="Enter Patient Gender" /><br/>
+    Gender <small>(required)</small> <input type="text" style="width: 60%; height: 30px" ng-model="vm.personData.gender" placeholder="Enter Patient Gender" /><br/>
 
     Age : <input type="text" style="width: 60%; height: 30px" ng-model="vm.personData.age" placeholder="Enter Age" /><br/>
 
@@ -29,9 +29,16 @@
 
   <img ng-hide="vm.loading" src="../../img/loading.gif"/>
 
-  <div ng-hide="vm.error">
-    <small> Halt !! Error with response : 400 </small> <br/>
-    <small> <b> Note: </b> Kindly fill all the fields marked with ** properly !! Don't leave it blank </small>
+  <div ng-hide="vm.blankPerson">
+    <small> Error !! kindly fill all the required fields and don't leave it blank </small> <br/>
+  </div>
+
+  <div ng-hide="vm.errorAge">
+    <small> Error !! Age must be a number between 1 and 100 </small> <br/>
+  </div>
+
+  <div ng-hide="vm.errorPerson">
+    <small> Error !! kindly check and fill all the fields properly </small> <br/>
   </div> <br/>
 
 </div>
@@ -46,15 +53,23 @@
   </div> <br/>
 
   <form>
-    Patient Identifier : ** <input type="text" style="width: 60%; height: 30px" ng-model="vm.patientData.identifiers[0].identifier" placeholder="Enter Identifier" />
+    Patient Identifier <small>(required)</small> <input type="text" style="width: 60%; height: 30px" ng-model="vm.patientData.identifiers[0].identifier" placeholder="Enter Identifier" />
     <a href ng-click="vm.generateIdentifier()"> <small> Click to generate Identifier if needed </small> </a>
-    <img ng-hide="vm.loadingIdentifier" src="../../img/loading.gif"/> <br/><br/>
+    <img ng-hide="vm.loadingIdentifier" src="../../img/loading.gif"/> <br/>
+    <small> ** We need to have idgen module installed in order to generate the Identifier </small> <br/><br/>
 
-    <p> Choose patient location: **</p>
+    <p> Choose patient location </p>
 
-    <select ng-change="vm.onSelectLocation()" ng-init ="vm.selectedLocation = vm.locations[0].name" ng-model="vm.selectedLocation">
-      <option ng-repeat="x in vm.locations" value="{{x.name}}">{{x.name}}</option>
+    <select ng-change="vm.onSelectLocation()" ng-model="vm.selectedLocation">
+      <option ng-repeat="x in vm.locations" value="{{x.uuid}}">{{x.name}}</option>
     </select> <br/>
+
+    <p> Choose patient identifier type </p>
+
+    <select ng-change="vm.onSelectIdentifier()" ng-model="vm.selectedIdentifier">
+      <option ng-repeat="x in vm.identifierTypes" value="{{x.uuid}}">{{x.display}}</option>
+    </select>
+    <small> ** Use of old identification number has been deprecated now </small> <br/><br/>
 
     <input type="submit" ng-click="vm.oncreatePatient()" value="Confirm"/>
   </form> <br/>
@@ -62,13 +77,8 @@
   <img ng-hide="vm.loadingPatient" src="../../img/loading.gif"/>
 
   <div ng-hide="vm.errorPatient">
-    <small> Halt !! Error with response : 400 </small> <br/>
-    <small> <b> Note: </b> Kindly check all the fields marked with ** properly !! </small>
-  </div>
-
-  <div ng-hide="vm.blankFields">
-    <small> Halt !! Error with response : 400 </small> <br/>
-    <small> <b> Note: </b> Kindly fill all the fields marked with ** properly !! Don't leave it blank </small>
+    <small> <b> Error : </b> {{vm.errorMessage}} </small> <br/>
+    <small> <b> Message : </b> {{vm.globalErrorMessage}} </small>
   </div>
 
   <div style="width: 60%; height: auto" ng-hide="vm.statusPatient">
