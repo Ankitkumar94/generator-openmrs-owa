@@ -72,3 +72,36 @@ header .logo img {
 .instructions {
     align-self: center;
 }
+
+.redBorder {
+  border: solid 2px #ff6666;
+}
+
+.errorFont {
+  color: #ff6666;
+}
+
+.errorBox {
+  width: 40%;
+  display:table;
+  border-radius: 5px;
+  padding: 20px;
+  background-color: #ff6666;
+  color: white;
+}
+
+.successBox {
+  width: 40%;
+  display:table;
+  border-radius: 5px;
+  padding: 20px;
+  background-color: #A1D030;
+  color: white;
+}
+
+/** use below class inside paragraph or div tag */
+
+.smallTextBox {
+  width: 70px;
+  height: auto;
+}

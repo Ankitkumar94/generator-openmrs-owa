@@ -1,6 +1,7 @@
 import angular from 'angular';
 import uiRouter from 'angular-ui-router';
 import breadcrumbsComponent from './components/breadcrumbs.component.js';
+import breadcrumbsPatientCreateComponent from './components/breadcrumbsPatientCreate.component';
 import translateComponent from './components/translate.component.js';
 import headerComponent from './components/header.component.js';
 import notificationComponent from './components/notification.component.js';
@@ -37,6 +38,7 @@ let homeModule = angular.module('home', [ uiRouter, 'openmrs-contrib-uicommons']
     }])
 
     .component('breadcrumbsComponent', breadcrumbsComponent)
+    .component('breadcrumbsPatientCreateComponent', breadcrumbsPatientCreateComponent)
     .component('translateComponent', translateComponent)
     .component('headerComponent', headerComponent)
     .component('notificationComponent', notificationComponent)
