@@ -73,14 +73,6 @@ header .logo img {
     align-self: center;
 }
 
-.redBorder {
-  border: solid 2px #ff6666;
-}
-
-.errorFont {
-  color: #ff6666;
-}
-
 .errorBox {
   width: 40%;
   display:table;
@@ -99,9 +91,3 @@ header .logo img {
   color: white;
 }
 
-/** use below class inside paragraph or div tag */
-
-.smallTextBox {
-  width: 70px;
-  height: auto;
-}

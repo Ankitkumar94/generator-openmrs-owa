@@ -3,14 +3,14 @@
   <h4> Step I </h4>
   <hr>
 
-  <form>
+  <form class="simple-form-ui">
 
     <p class="input-position-class">
       <label name="input-id">Given Name <small>(required)</small> </label>
       <input type="text" style="width: 60%; height: 30px" ng-model="vm.personData.names[0].givenName" placeholder="Enter First/Given Name"
-             ng-class="{'redBorder': vm.invalidGivenName}" ng-change="vm.invalidGivenName=false" />
+             ng-class="{'illegalValue': vm.invalidGivenName}" ng-change="vm.invalidGivenName=false" />
     </p>
-    <p ng-show="vm.invalidGivenName" class="errorFont"> <small> Given Name is required </small> </p>
+    <p ng-show="vm.invalidGivenName" class="field-error"> <small> Given Name is required </small> </p>
 
     <p class="input-position-class">
       <label name="input-id">Middle Name</label>
@@ -20,9 +20,9 @@
     <p class="input-position-class">
       <label name="input-id">Family Name <small>(required)</small> </label>
       <input type="text" style="width: 60%; height: 30px" ng-model="vm.personData.names[0].familyName" placeholder="Enter Family Name"
-             ng-class="{'redBorder': vm.invalidFamilyName}" ng-change="vm.invalidFamilyName=false"/>
+             ng-class="{'illegalValue': vm.invalidFamilyName}" ng-change="vm.invalidFamilyName=false"/>
     </p>
-    <p ng-show="vm.invalidFamilyName" class="errorFont"> <small> Family Name is required </small> </p>
+    <p ng-show="vm.invalidFamilyName" class="field-error"> <small> Family Name is required </small> </p>
 
     Select Gender
     <select ng-change="vm.onSelectGender()" ng-model="vm.selectedGender" ng-init="vm.selectedGender = 'Male'">
@@ -32,11 +32,11 @@
     </select> <br/>
 
     <label name="input-id">Age <small>(required)</small> </label>
-    <p class="smallTextBox">
-      <input type="text" style="height: 30px" ng-model="vm.personData.age" placeholder="Enter Age" ng-class="{'redBorder': vm.invalidAge}"
+    <p style="width: 70px; height: auto">
+      <input type="text" style="height: 30px" ng-model="vm.personData.age" placeholder="Enter Age" ng-class="{'illegalValue': vm.invalidAge}"
              ng-change="vm.invalidAge=false" />
     </p>
-    <p ng-show="vm.invalidAge" class="errorFont"> <small> Age must be a number between 1 and 100 </small> </p>
+    <p ng-show="vm.invalidAge" class="field-error"> <small> Age must be a number between 1 and 100 </small> </p>
 
     <a href="" ng-click="vm.addressFields()"> Hide/Show Address Fields (optional) </a> <br/><br/>
 
@@ -91,7 +91,7 @@
     <a href="" ng-click="vm.back()"> <small> << Back to Step I </small> </a>
   </div> <br/>
 
-  <form>
+  <form class="simple-form-ui">
     <p> Choose patient identifier type </p>
 
     <select ng-change="vm.onSelectIdentifier()" ng-model="vm.selectedIdentifier">
@@ -102,9 +102,9 @@
       <p class="input-position-class">
         <label name="input-id">Patient Identifier <small>(required)</small> </label>
         <input type="text" style="width: 60%; height: 30px" ng-model="vm.patientData.identifiers[0].identifier" placeholder="Enter Identifier"
-               ng-class="{'redBorder': vm.blankIdentifier}" ng-change="vm.blankIdentifier=false"/>
+               ng-class="{'illegalValue': vm.blankIdentifier}" ng-change="vm.blankIdentifier=false"/>
       </p>
-      <p ng-show="vm.blankIdentifier" class="errorFont"> <small> Identifier is required </small> </p>
+      <p ng-show="vm.blankIdentifier" class="field-error"> <small> Identifier is required </small> </p>
       <a href ng-click="vm.generateIdentifier()"> <small> Click to generate Identifier if needed </small> </a>
       <img ng-hide="vm.loadingIdentifier" src="../../img/loading.gif"/> <br/>
       <small> ** We need to have idgen module installed in order to generate the Identifier </small> <br/><br/>
@@ -114,9 +114,9 @@
       <p class="input-position-class">
         <label name="input-id">OpenMRS ID Identifier <small>(required)</small> </label>
         <input type="text" style="width: 60%; height: 30px" ng-model="vm.oldPatientData.identifiers[0].identifier" placeholder="Enter OpenMRS ID Identifier"
-               ng-class="{'redBorder': vm.blankOpenmrsIdentifier}" ng-change="vm.blankOpenmrsIdentifier=false"/>
+               ng-class="{'illegalValue': vm.blankOpenmrsIdentifier}" ng-change="vm.blankOpenmrsIdentifier=false"/>
       </p>
-      <p ng-show="vm.blankOpenmrsIdentifier" class="errorFont"> <small> OpenMRS ID Identifier is required </small> </p>
+      <p ng-show="vm.blankOpenmrsIdentifier" class="field-error"> <small> OpenMRS ID Identifier is required </small> </p>
       <a href ng-click="vm.generateIdentifier()"> <small> Click to generate Identifier if needed </small> </a>
       <img ng-hide="vm.loadingIdentifier" src="../../img/loading.gif"/> <br/>
       <small> ** We need to have idgen module installed in order to generate the Identifier </small> <br/><br/>
@@ -124,9 +124,9 @@
       <p class="input-position-class">
         <label name="input-id">Identifier <small>(required)</small> </label>
         <input type="text" style="width: 60%; height: 30px" ng-model="vm.oldPatientData.identifiers[1].identifier" placeholder="Enter Identifier"
-               ng-class="{'redBorder': vm.blankOldIdentifier}" ng-change="vm.blankOldIdentifier=false"/>
+               ng-class="{'illegalValue': vm.blankOldIdentifier}" ng-change="vm.blankOldIdentifier=false"/>
       </p>
-      <p ng-show="vm.blankOldIdentifier" class="errorFont"> <small> Identifier is required </small> </p>
+      <p ng-show="vm.blankOldIdentifier" class="field-error"> <small> Identifier is required </small> </p>
     </div>
 
     <p> Choose patient location </p>
