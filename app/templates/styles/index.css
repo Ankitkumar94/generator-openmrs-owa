@@ -73,21 +73,3 @@ header .logo img {
     align-self: center;
 }
 
-.errorBox {
-  width: 40%;
-  display:table;
-  border-radius: 5px;
-  padding: 20px;
-  background-color: #ff6666;
-  color: white;
-}
-
-.successBox {
-  width: 40%;
-  display:table;
-  border-radius: 5px;
-  padding: 20px;
-  background-color: #A1D030;
-  color: white;
-}
-
